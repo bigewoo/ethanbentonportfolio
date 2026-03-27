@@ -1,9 +1,12 @@
+// File: /js/index.js
+
 const cube = document.getElementById('cube');
 let isDragging = false;
 let startMouseX, startMouseY;
 let currentRotationX = -20;
 let currentRotationY = 30;
 
+// Set initial position
 cube.style.transform = `rotateX(${currentRotationX}deg) rotateY(${currentRotationY}deg)`;
 
 document.addEventListener('mousedown', (e) => {
@@ -18,6 +21,7 @@ document.addEventListener('mousemove', (e) => {
     const deltaX = e.clientX - startMouseX;
     const deltaY = e.clientY - startMouseY;
 
+    // Adjust rotation based on mouse movement
     currentRotationY += deltaX * 0.5;
     currentRotationX -= deltaY * 0.5;
 
