@@ -4,7 +4,7 @@ const cube = document.getElementById('cube');
 const navLinksContainer = document.getElementById('nav-links');
 const emailLink = document.getElementById('email-link');
 
-const userEmail = "USER@EXAMPLE.COM";
+const userEmail = "ethanfbenton@gmail.com";
 const menuItems = [
     { name: "ABOUT", link: "#about" },
     { name: "EDUCATION", link: "#education" },
