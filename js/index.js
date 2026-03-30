@@ -3,12 +3,14 @@
 const heroName = document.getElementById('hero-name');
 const heroTitle = document.getElementById('hero-title');
 const emailLink = document.getElementById('email-link');
+const resumeLink = document.getElementById('resume-link');
 const navLinksContainer = document.getElementById('nav-links');
 const cube = document.getElementById('cube');
 
 const nameText = "Hello, I'm Ethan";
 const titleText = "System Administrator | DevOps | Generative AI";
 const userEmail = "ethanfbenton@gmail.com";
+const resumeText = "RESUME 📄"; // Added the emoji here
 
 const menuItems = [
     { name: "ABOUT", link: "#about" },
@@ -39,7 +41,14 @@ async function typeEffect() {
     }
     emailLink.innerHTML = userEmail;
 
-    // 4. Type Sidebar Links
+    // 4. Type Resume (Bottom Right)
+    for (let i = 0; i <= resumeText.length; i++) {
+        resumeLink.innerHTML = resumeText.slice(0, i) + '<span class="cursor">_</span>';
+        await new Promise(r => setTimeout(r, 50));
+    }
+    resumeLink.innerHTML = resumeText;
+
+    // 5. Type Sidebar Links
     for (const item of menuItems) {
         const anchor = document.createElement('a');
         anchor.href = item.link;
@@ -51,7 +60,6 @@ async function typeEffect() {
         anchor.innerHTML = `> ${item.name}`;
     }
 }
-
 // Cube Logic
 let isDragging = false;
 let startMouseX, startMouseY;

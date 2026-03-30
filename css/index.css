@@ -71,6 +71,43 @@ body {
     opacity: 0.8;
 }
 
+/* Resume - Bottom Right Positioning */
+#resume-container {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 1001;
+}
+
+#resume-link {
+    color: #00ffcc;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+#resume-link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #00ffcc;
+    transform: scale(1.1);
+}
+
+/* Ensure the cursor is visible during typing */
+.cursor {
+    display: inline-block;
+    width: 10px;
+    background-color: #00ffcc;
+    margin-left: 5px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
 /* Section Layouts */
 section {
     height: 100vh;
