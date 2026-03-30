@@ -12,25 +12,21 @@ body {
     font-family: 'Courier New', Courier, monospace;
 }
 
-/* Email - Top Center Positioning */
+/* Email & Nav (Top Right/Center) */
 #email-container {
     position: fixed;
     top: 30px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1001;
-    text-align: center;
 }
 
 #email-link {
     color: #00ffcc;
     text-decoration: none;
     font-weight: bold;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
 }
 
-/* Navigation - Top Right Positioning */
 #navbar {
     position: fixed;
     top: 30px;
@@ -49,13 +45,30 @@ body {
     color: #00ffcc;
     text-decoration: none;
     font-weight: bold;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
 }
 
-#nav-links a:hover, #email-link:hover {
+/* Hero Content Styling */
+#hero {
+    flex-direction: column; /* Stack text and cube vertically */
+}
+
+#hero-content {
+    margin-bottom: 40px; /* Space between text and cube */
+    text-align: center;
+}
+
+#hero-name {
+    font-size: 2.5rem;
+    margin: 0;
     color: #fff;
-    text-shadow: 0 0 10px #00ffcc;
+    text-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+}
+
+#hero-title {
+    font-size: 1.1rem;
+    color: #00ffcc;
+    margin-top: 10px;
+    opacity: 0.8;
 }
 
 /* Section Layouts */
@@ -66,20 +79,15 @@ section {
     align-items: center;
 }
 
-/* Cube Styles */
+/* Cube Styles remains the same */
 .scene { width: 200px; height: 200px; perspective: 600px; }
-.cube {
-    width: 100%; height: 100%; position: relative;
-    transform-style: preserve-3d; cursor: grab;
-}
-.cube:active { cursor: grabbing; }
+.cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; cursor: grab; }
 .face {
     position: absolute; width: 200px; height: 200px;
     border: 1px solid rgba(0, 255, 204, 0.3);
     display: flex; align-items: center; justify-content: center;
     background: rgba(0, 255, 204, 0.05);
     backdrop-filter: blur(2px);
-    user-select: none;
 }
 
 .front  { transform: rotateY(0deg) translateZ(100px); }
