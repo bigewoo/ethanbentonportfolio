@@ -95,6 +95,20 @@ const terminalInput = document.getElementById('terminal-input');
 const terminalOutput = document.getElementById('terminal-output');
 const promptElement = document.getElementById('prompt'); // The span for ethan@portfolio:~$
 
+// Toggle Terminal open/close
+terminalIcon.addEventListener('click', () => {
+    terminalWindow.classList.toggle('hidden');
+    // Auto-focus the input box when opened
+    if (!terminalWindow.classList.contains('hidden')) {
+        terminalInput.focus();
+    }
+});
+
+// Close Terminal with the X button
+closeTerminal.addEventListener('click', () => {
+    terminalWindow.classList.add('hidden');
+});
+
 let currentDir = "~"; // Default root directory
 
 // File system mapping for 'ls'
