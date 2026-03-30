@@ -255,97 +255,86 @@ section {
 /* --- MOBILE RESPONSIVENESS --- */
 @media screen and (max-width: 768px) {
     
-    /* 1. Stack Hero Content Vetrically and tight */
-    #hero {
-        flex-direction: column-reverse; /* Put the text above the cube */
-        justify-content: center;
-        gap: 20px;
-    }
-
-    /* Adjust Hero Text */
-    #hero-name {
-        font-size: 1.6rem; /* Shrink name slightly */
-        line-height: 1.2;
-    }
-
-    #hero-title {
-        font-size: 0.85rem; /* Shrink titles */
-        padding: 0 15px;
-    }
-
-    /* 2. Scaled Down Cube */
-    .scene {
-        width: 140px; /* Make the cube 30% smaller */
-        height: 140px;
-    }
-
-    .face {
-        width: 140px;
-        height: 140px;
-        font-size: 0.8rem;
-    }
-
-    /* Recalculate 3D for 140px size (70px is half) */
-    .front  { transform: rotateY(0deg) translateZ(70px); }
-    .back   { transform: rotateY(180deg) translateZ(70px); }
-    .right  { transform: rotateY(90deg) translateZ(70px); }
-    .left   { transform: rotateY(-90deg) translateZ(70px); }
-    .top    { transform: rotateX(90deg) translateZ(70px); }
-    .bottom { transform: rotateX(-90deg) translateZ(70px); }
-
-    /* 3. --- The Nav is NOW kept and centered --- */
-    #navbar {
-        position: absolute; /* Unlock from fixed top-right for stacking */
+    /* 1. Re-enable and adjust Email at the top */
+    #email-container {
+        display: block !important;
+        top: 15px;
+        font-size: 0.65rem; /* Small so it fits between icon and nav */
         width: 100%;
-        top: 20px;
-        right: auto;
-        padding: 0;
-        display: flex;
-        justify-content: center; /* Center the links */
-        z-index: 1003;
+        text-align: center;
+    }
+
+    /* 2. Vertically Aligned Nav (Pinned Top-Right) */
+    #navbar {
+        top: 15px;
+        right: 15px;
     }
 
     #nav-links {
         display: flex;
-        flex-direction: row; /* Switch from vertical to horizontal */
-        align-items: center;
-        justify-content: center;
-        gap: 15px; /* Tight gap */
-        width: auto;
+        flex-direction: column; /* Back to vertical */
+        align-items: flex-end;
+        gap: 8px; /* Tighten vertical gap */
     }
 
     #nav-links a {
-        font-size: 0.75rem; /* Smaller, tappable text */
-        letter-spacing: 0;
-        padding: 5px; /* Make the tap target larger */
+        font-size: 0.7rem;
+        padding: 4px;
     }
 
-    /* Tidy up the top center/left elements */
+    /* 3. Hero Content & Tiny Cube */
+    #hero {
+        flex-direction: column; 
+        padding-top: 60px; /* Room for header elements */
+    }
+
+    #hero-name {
+        font-size: 1.4rem;
+        margin-top: 20px;
+    }
+
+    #hero-title {
+        font-size: 0.75rem;
+    }
+
+    /* Shrink the cube significantly for mobile */
+    .scene {
+        width: 100px; 
+        height: 100px;
+        margin-top: 30px;
+    }
+
+    .face {
+        width: 100px;
+        height: 100px;
+        font-size: 0.6rem;
+    }
+
+    /* Recalculate 3D for 100px size (50px is half) */
+    .front  { transform: rotateY(0deg) translateZ(50px); }
+    .back   { transform: rotateY(180deg) translateZ(50px); }
+    .right  { transform: rotateY(90deg) translateZ(50px); }
+    .left   { transform: rotateY(-90deg) translateZ(50px); }
+    .top    { transform: rotateX(90deg) translateZ(50px); }
+    .bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+    /* 4. Terminal Icon Adjustment */
     #terminal-icon {
         top: 15px;
         left: 15px;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
-    #email-container {
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: none; /* Hide the email on small mobile to prevent clash with nav */
+    /* 5. Terminal Window (Make it wide enough to type) */
+    #terminal-window {
+        width: 94vw;
+        left: 3vw;
+        height: 35vh;
+        top: 55px;
     }
 
-    /* 4. Socials and Resume Pinned to corners */
-    #social-container {
+    /* 6. Footer Elements */
+    #social-container, #resume-container {
         bottom: 15px;
-        left: 15px;
     }
-    
-    #social-links a { font-size: 0.8rem; gap: 8px; }
-
-    #resume-container {
-        bottom: 15px;
-        right: 15px;
-    }
-    
-    #resume-link { font-size: 0.85rem; }
 }
