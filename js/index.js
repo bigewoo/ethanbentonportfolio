@@ -91,61 +91,90 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => isDragging = false);
 
 // Terminal Logic
-const terminalIcon = document.getElementById('terminal-icon');
-const terminalWindow = document.getElementById('terminal-window');
-const closeTerminal = document.getElementById('close-terminal');
 const terminalInput = document.getElementById('terminal-input');
 const terminalOutput = document.getElementById('terminal-output');
+const promptElement = document.getElementById('prompt'); // The span for ethan@portfolio:~$
 
-// Toggle Terminal
-terminalIcon.addEventListener('click', () => {
-    terminalWindow.classList.toggle('hidden');
-    if (!terminalWindow.classList.contains('hidden')) terminalInput.focus();
-});
+let currentDir = "~"; // Default root directory
 
-closeTerminal.addEventListener('click', () => {
-    terminalWindow.classList.add('hidden');
-});
+// File system mapping for 'ls'
+const fileSystem = {
+    "~": ["about/", "education/", "work/", "contact/"],
+    "about": ["bio.txt", "tech_stack.json", "goals.md"],
+    "education": ["degree.pdf", "certs/", "courses.log"],
+    "work": ["experience.yaml", "projects/", "references.txt"],
+    "contact": ["email.url", "linkedin.url", "github.url"]
+};
 
-// Command Logic
 terminalInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-        const input = terminalInput.value.trim().toLowerCase();
-        processCommand(input);
+        const input = terminalInput.value.trim(); // Keep case-sensitive for display
+        const [cmd, ...args] = input.toLowerCase().split(' '); 
+        
+        // 1. Process the command
+        processCommand(cmd, args, input);
+
+        // 2. Clear the input immediately
         terminalInput.value = '';
+        
+        // 3. Keep scrolled to bottom
+        const body = document.getElementById('terminal-body');
+        body.scrollTop = body.scrollHeight;
     }
 });
 
-function processCommand(cmd) {
-    let response = `\nethan@portfolio:~$ ${cmd}\n`;
+function processCommand(cmd, args, originalInput) {
+    let response = `\nethan@portfolio:${currentDir}$ ${originalInput}\n`;
     
-    if (cmd === 'help') {
-        response += "Available commands: help, ls, cd [section], clear, whoami, exit";
-    } else if (cmd === 'ls') {
-        response += "about  education  work  contact";
-    } else if (cmd === 'whoami') {
-        response += "Ethan Benton - SysAdmin | DevOps | GenAI Enthusiast";
-    } else if (cmd === 'clear') {
-        terminalOutput.innerHTML = "Terminal cleared.";
-        return;
-    } else if (cmd.startsWith('cd ')) {
-        const section = cmd.split(' ')[1];
-        const target = document.getElementById(section);
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-            response += `Navigating to ${section}...`;
-        } else {
-            response += `Directory not found: ${section}`;
-        }
-    } else if (cmd === 'exit') {
-        terminalWindow.classList.add('hidden');
-        return;
-    } else {
-        response += `Command not found: ${cmd}. Type 'help' for options.`;
+    switch (cmd) {
+        case 'help':
+            response += "Available: ls, cd [dir], clear, whoami, exit, help";
+            break;
+
+        case 'ls':
+            // Show content based on current directory
+            const contents = fileSystem[currentDir === "~" ? "~" : currentDir];
+            response += contents.join("  ");
+            break;
+
+        case 'whoami':
+            response += "Ethan Benton - DevOps & SysAdmin Specialist";
+            break;
+
+        case 'clear':
+            terminalOutput.innerHTML = "Terminal cleared. Type 'help' for commands.";
+            return;
+
+        case 'cd':
+            const target = args[0];
+            if (!target || target === "~" || target === "..") {
+                currentDir = "~";
+                response += "Returned to root.";
+            } else if (fileSystem[target]) {
+                currentDir = target;
+                response += `Moved to ${target}.`;
+                // Smooth scroll to the section
+                const section = document.getElementById(target);
+                if (section) section.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                response += `bash: cd: ${target}: No such directory`;
+            }
+            // Update the actual prompt text
+            promptElement.innerText = `ethan@portfolio:${currentDir === "~" ? "~" : "/" + currentDir}$`;
+            break;
+
+        case 'exit':
+            document.getElementById('terminal-window').classList.add('hidden');
+            return;
+
+        case '': // If user just hits enter
+            break;
+
+        default:
+            response += `bash: ${cmd}: command not found`;
     }
 
     terminalOutput.innerHTML += response;
-    terminalBody.scrollTop = terminalBody.scrollHeight; // Auto-scroll to bottom
 }
 
 window.onload = typeEffect;
