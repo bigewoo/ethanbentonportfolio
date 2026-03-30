@@ -250,3 +250,102 @@ section {
 .left   { transform: rotateY(-90deg) translateZ(100px); }
 .top    { transform: rotateX(90deg) translateZ(100px); }
 .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media screen and (max-width: 768px) {
+    
+    /* 1. Stack Hero Content Vetrically and tight */
+    #hero {
+        flex-direction: column-reverse; /* Put the text above the cube */
+        justify-content: center;
+        gap: 20px;
+    }
+
+    /* Adjust Hero Text */
+    #hero-name {
+        font-size: 1.6rem; /* Shrink name slightly */
+        line-height: 1.2;
+    }
+
+    #hero-title {
+        font-size: 0.85rem; /* Shrink titles */
+        padding: 0 15px;
+    }
+
+    /* 2. Scaled Down Cube */
+    .scene {
+        width: 140px; /* Make the cube 30% smaller */
+        height: 140px;
+    }
+
+    .face {
+        width: 140px;
+        height: 140px;
+        font-size: 0.8rem;
+    }
+
+    /* Recalculate 3D for 140px size (70px is half) */
+    .front  { transform: rotateY(0deg) translateZ(70px); }
+    .back   { transform: rotateY(180deg) translateZ(70px); }
+    .right  { transform: rotateY(90deg) translateZ(70px); }
+    .left   { transform: rotateY(-90deg) translateZ(70px); }
+    .top    { transform: rotateX(90deg) translateZ(70px); }
+    .bottom { transform: rotateX(-90deg) translateZ(70px); }
+
+    /* 3. --- The Nav is NOW kept and centered --- */
+    #navbar {
+        position: absolute; /* Unlock from fixed top-right for stacking */
+        width: 100%;
+        top: 20px;
+        right: auto;
+        padding: 0;
+        display: flex;
+        justify-content: center; /* Center the links */
+        z-index: 1003;
+    }
+
+    #nav-links {
+        display: flex;
+        flex-direction: row; /* Switch from vertical to horizontal */
+        align-items: center;
+        justify-content: center;
+        gap: 15px; /* Tight gap */
+        width: auto;
+    }
+
+    #nav-links a {
+        font-size: 0.75rem; /* Smaller, tappable text */
+        letter-spacing: 0;
+        padding: 5px; /* Make the tap target larger */
+    }
+
+    /* Tidy up the top center/left elements */
+    #terminal-icon {
+        top: 15px;
+        left: 15px;
+        font-size: 1.2rem;
+    }
+
+    #email-container {
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none; /* Hide the email on small mobile to prevent clash with nav */
+    }
+
+    /* 4. Socials and Resume Pinned to corners */
+    #social-container {
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    #social-links a { font-size: 0.8rem; gap: 8px; }
+
+    #resume-container {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    #resume-link { font-size: 0.85rem; }
+}
