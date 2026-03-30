@@ -71,6 +71,41 @@ body {
     opacity: 0.8;
 }
 
+/* Social Links - Bottom Left Positioning */
+#social-container {
+    position: fixed;
+    bottom: 40px;
+    left: 40px;
+    z-index: 1001;
+}
+
+#social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#social-links a {
+    color: #00ffcc;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between logo and text */
+    transition: all 0.2s ease;
+}
+
+#social-links i {
+    font-size: 1.2rem; /* Make the logo slightly larger than the text */
+}
+
+#social-links a:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #00ffcc;
+    transform: translateX(5px); /* Subtle slide effect on hover */
+}
+
 /* Resume - Bottom Right Positioning */
 #resume-container {
     position: fixed;

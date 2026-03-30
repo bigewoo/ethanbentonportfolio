@@ -5,12 +5,18 @@ const heroTitle = document.getElementById('hero-title');
 const emailLink = document.getElementById('email-link');
 const resumeLink = document.getElementById('resume-link');
 const navLinksContainer = document.getElementById('nav-links');
+const socialLinksContainer = document.getElementById('social-links');
 const cube = document.getElementById('cube');
 
 const nameText = "Hello, I'm Ethan";
 const titleText = "System Administrator | DevOps | Generative AI";
 const userEmail = "ethanfbenton@gmail.com";
-const resumeText = "RESUME 📄"; // Added the emoji here
+const resumeText = "RESUME 📄";
+
+const socialItems = [
+    { name: "GITHUB", link: "https://github.com/yourusername", icon: "fa-brands fa-github" },
+    { name: "LINKEDIN", link: "https://linkedin.com/in/yourusername", icon: "fa-brands fa-linkedin" }
+];
 
 const menuItems = [
     { name: "ABOUT", link: "#about" },
@@ -20,46 +26,53 @@ const menuItems = [
 ];
 
 async function typeEffect() {
-    // 1. Type Name
-    for (let i = 0; i <= nameText.length; i++) {
-        heroName.innerHTML = nameText.slice(0, i) + '<span class="cursor">_</span>';
-        await new Promise(r => setTimeout(r, 60));
-    }
-    heroName.innerHTML = nameText;
+    // 1. Type Name & Title
+    await typeText(heroName, nameText, 60);
+    await typeText(heroTitle, titleText, 40);
 
-    // 2. Type Title
-    for (let i = 0; i <= titleText.length; i++) {
-        heroTitle.innerHTML = titleText.slice(0, i) + '<span class="cursor">_</span>';
-        await new Promise(r => setTimeout(r, 40));
-    }
-    heroTitle.innerHTML = titleText;
+    // 2. Type Email
+    await typeText(emailLink, userEmail, 30);
 
-    // 3. Type Email
-    for (let i = 0; i <= userEmail.length; i++) {
-        emailLink.innerHTML = userEmail.slice(0, i) + '<span class="cursor">_</span>';
-        await new Promise(r => setTimeout(r, 30));
+    // 3. Type Social Links (Bottom Left)
+    for (const soc of socialItems) {
+        const anchor = document.createElement('a');
+        anchor.href = soc.link;
+        anchor.target = "_blank";
+        anchor.innerHTML = `<i class="${soc.icon}"></i> `; // Add icon first
+        socialLinksContainer.appendChild(anchor);
+        
+        const textSpan = document.createElement('span');
+        anchor.appendChild(textSpan);
+
+        for (let i = 0; i <= soc.name.length; i++) {
+            textSpan.innerHTML = soc.name.slice(0, i) + '<span>_</span>';
+            await new Promise(r => setTimeout(r, 50));
+        }
+        textSpan.innerHTML = soc.name;
     }
-    emailLink.innerHTML = userEmail;
 
     // 4. Type Resume (Bottom Right)
-    for (let i = 0; i <= resumeText.length; i++) {
-        resumeLink.innerHTML = resumeText.slice(0, i) + '<span class="cursor">_</span>';
-        await new Promise(r => setTimeout(r, 50));
-    }
-    resumeLink.innerHTML = resumeText;
+    await typeText(resumeLink, resumeText, 50);
 
     // 5. Type Sidebar Links
     for (const item of menuItems) {
         const anchor = document.createElement('a');
         anchor.href = item.link;
         navLinksContainer.appendChild(anchor);
-        for (let i = 0; i <= item.name.length; i++) {
-            anchor.innerHTML = `> ${item.name.slice(0, i)}<span>_</span>`;
-            await new Promise(r => setTimeout(r, 50));
-        }
-        anchor.innerHTML = `> ${item.name}`;
+        await typeText(anchor, `> ${item.name}`, 50);
     }
 }
+
+// Helper function to keep the code clean
+async function typeText(element, text, speed) {
+    for (let i = 0; i <= text.length; i++) {
+        element.innerHTML = text.slice(0, i) + '<span class="cursor">_</span>';
+        await new Promise(r => setTimeout(r, speed));
+    }
+    element.innerHTML = text;
+}
+
+
 // Cube Logic
 let isDragging = false;
 let startMouseX, startMouseY;
