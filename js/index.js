@@ -133,7 +133,7 @@ terminalInput.addEventListener('keydown', (e) => {
         } else {
             // Just print a new prompt line if they press enter on an empty line
             const displayDir = currentDir === "~" ? "~" : "/" + currentDir;
-            terminalOutput.innerHTML += `\nethan@portfolio:${displayDir}$ \n`;
+            terminalOutput.innerHTML += `\nethanbenton@portfolio:${displayDir}$ \n`;
         }
 
         // Clear the input immediately so it's not prefilled
@@ -148,7 +148,7 @@ terminalInput.addEventListener('keydown', (e) => {
 function processCommand(cmd, args, originalInput) {
     // Determine how the path should look for the history log
     const displayDir = currentDir === "~" ? "~" : "/" + currentDir;
-    let response = `\nethan@portfolio:${displayDir}$ ${originalInput}\n`;
+    let response = `\nethanbenton@portfolio:${displayDir}$ ${originalInput}\n`;
     
     switch (cmd) {
         case 'help':
@@ -187,7 +187,7 @@ function processCommand(cmd, args, originalInput) {
             
             // UPDATE THE UI PROMPT dynamically
             const newDisplayDir = currentDir === "~" ? "~" : "/" + currentDir;
-            promptElement.innerText = `ethan@portfolio:${newDisplayDir}$`;
+            promptElement.innerText = `ethanbenton@portfolio:${newDisplayDir}$`;
             break;
 
         case 'exit':
