@@ -12,7 +12,25 @@ body {
     font-family: 'Courier New', Courier, monospace;
 }
 
-/* Navigation - Explicitly Pinned Top Right */
+/* Email - Top Center Positioning */
+#email-container {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    text-align: center;
+}
+
+#email-link {
+    color: #00ffcc;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* Navigation - Top Right Positioning */
 #navbar {
     position: fixed;
     top: 30px;
@@ -33,10 +51,9 @@ body {
     font-weight: bold;
     font-size: 0.9rem;
     letter-spacing: 1px;
-    transition: text-shadow 0.2s ease;
 }
 
-#nav-links a:hover {
+#nav-links a:hover, #email-link:hover {
     color: #fff;
     text-shadow: 0 0 10px #00ffcc;
 }
@@ -62,6 +79,7 @@ section {
     display: flex; align-items: center; justify-content: center;
     background: rgba(0, 255, 204, 0.05);
     backdrop-filter: blur(2px);
+    user-select: none;
 }
 
 .front  { transform: rotateY(0deg) translateZ(100px); }
