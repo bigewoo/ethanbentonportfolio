@@ -8,14 +8,14 @@ const navLinksContainer = document.getElementById('nav-links');
 const socialLinksContainer = document.getElementById('social-links');
 const cube = document.getElementById('cube');
 
-const nameText = "Hello, I'm Ethan";
+const nameText = "Hello, I'm Ethan Benton";
 const titleText = "System Administrator | DevOps | Generative AI";
 const userEmail = "ethanfbenton@gmail.com";
 const resumeText = "RESUME 📄";
 
 const socialItems = [
-    { name: "GITHUB", link: "https://github.com/yourusername", icon: "fa-brands fa-github" },
-    { name: "LINKEDIN", link: "https://linkedin.com/in/yourusername", icon: "fa-brands fa-linkedin" }
+    { name: "GITHUB", link: "https://github.com/bigewoo", icon: "fa-brands fa-github" },
+    { name: "LINKEDIN", link: "https://www.linkedin.com/in/ethan-benton-a08a14313/", icon: "fa-brands fa-linkedin" }
 ];
 
 const menuItems = [
@@ -89,5 +89,63 @@ document.addEventListener('mousemove', (e) => {
     startMouseX = e.clientX; startMouseY = e.clientY;
 });
 document.addEventListener('mouseup', () => isDragging = false);
+
+// Terminal Logic
+const terminalIcon = document.getElementById('terminal-icon');
+const terminalWindow = document.getElementById('terminal-window');
+const closeTerminal = document.getElementById('close-terminal');
+const terminalInput = document.getElementById('terminal-input');
+const terminalOutput = document.getElementById('terminal-output');
+
+// Toggle Terminal
+terminalIcon.addEventListener('click', () => {
+    terminalWindow.classList.toggle('hidden');
+    if (!terminalWindow.classList.contains('hidden')) terminalInput.focus();
+});
+
+closeTerminal.addEventListener('click', () => {
+    terminalWindow.classList.add('hidden');
+});
+
+// Command Logic
+terminalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const input = terminalInput.value.trim().toLowerCase();
+        processCommand(input);
+        terminalInput.value = '';
+    }
+});
+
+function processCommand(cmd) {
+    let response = `\nethan@portfolio:~$ ${cmd}\n`;
+    
+    if (cmd === 'help') {
+        response += "Available commands: help, ls, cd [section], clear, whoami, exit";
+    } else if (cmd === 'ls') {
+        response += "about  education  work  contact";
+    } else if (cmd === 'whoami') {
+        response += "Ethan Benton - SysAdmin | DevOps | GenAI Enthusiast";
+    } else if (cmd === 'clear') {
+        terminalOutput.innerHTML = "Terminal cleared.";
+        return;
+    } else if (cmd.startsWith('cd ')) {
+        const section = cmd.split(' ')[1];
+        const target = document.getElementById(section);
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            response += `Navigating to ${section}...`;
+        } else {
+            response += `Directory not found: ${section}`;
+        }
+    } else if (cmd === 'exit') {
+        terminalWindow.classList.add('hidden');
+        return;
+    } else {
+        response += `Command not found: ${cmd}. Type 'help' for options.`;
+    }
+
+    terminalOutput.innerHTML += response;
+    terminalBody.scrollTop = terminalBody.scrollHeight; // Auto-scroll to bottom
+}
 
 window.onload = typeEffect;

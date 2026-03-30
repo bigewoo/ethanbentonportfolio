@@ -9,6 +9,24 @@
 </head>
 <body>
 
+    <div id="terminal-icon" title="Open Terminal">
+        <i class="fas fa-terminal"></i>
+    </div>
+
+    <div id="terminal-window" class="hidden">
+        <div id="terminal-header">
+            <span>bash — ethan@portfolio</span>
+            <button id="close-terminal">X</button>
+        </div>
+        <div id="terminal-body">
+            <div id="terminal-output">Welcome to EthanOS v1.0.0. Type 'help' to begin.</div>
+            <div id="input-line">
+                <span id="prompt">ethan@portfolio:~$</span>
+                <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+    </div>
+
     <div id="email-container">
         <a id="email-link" href="mailto:ethanfbenton@gmail.com"></a>
     </div>
@@ -30,7 +48,6 @@
             <h1 id="hero-name"></h1>
             <p id="hero-title"></p>
         </div>
-
         <div class="scene">
             <div class="cube" id="cube">
                 <div class="face front">HOME</div>

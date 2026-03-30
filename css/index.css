@@ -129,6 +129,88 @@ body {
     transform: scale(1.1);
 }
 
+/* Terminal Icon - Top Left */
+#terminal-icon {
+    position: fixed;
+    top: 30px;
+    left: 40px;
+    z-index: 1002;
+    color: #00ffcc;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+#terminal-icon:hover {
+    transform: scale(1.2);
+    text-shadow: 0 0 10px #00ffcc;
+}
+
+/* Terminal Window */
+#terminal-window {
+    position: fixed;
+    top: 100px;
+    left: 40px;
+    width: 400px;
+    height: 250px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #333;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    z-index: 2000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.hidden { display: none !important; }
+
+#terminal-header {
+    background: #1a1a1a;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    border-bottom: 1px solid #333;
+    cursor: move;
+}
+
+#close-terminal {
+    background: none;
+    border: none;
+    color: #ff5555;
+    cursor: pointer;
+}
+
+#terminal-body {
+    padding: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    color: #00ffcc;
+}
+
+#terminal-output {
+    white-space: pre-wrap;
+    margin-bottom: 10px;
+}
+
+#input-line {
+    display: flex;
+    gap: 5px;
+}
+
+#terminal-input {
+    background: none;
+    border: none;
+    color: #fff;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    flex-grow: 1;
+}
+
+#prompt { color: #00ffcc; }
+
 /* Ensure the cursor is visible during typing */
 .cursor {
     display: inline-block;
