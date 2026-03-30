@@ -1,6 +1,5 @@
 /* File: /css/index.css */
 
-/* Smooth scrolling for the "drag down" effect */
 html {
     scroll-behavior: smooth;
 }
@@ -10,29 +9,52 @@ body {
     padding: 0;
     background-color: #000;
     color: white;
-    font-family: 'Courier New', Courier, monospace; /* Terminal font */
+    font-family: 'Courier New', Courier, monospace;
 }
 
-/* Persistent Navbar */
+/* Email - Top Center */
+#email-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+}
+
+#email-link {
+    color: #00ffcc;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
+
+/* Navigation - Top Right */
 #navbar {
     position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
+    top: 20px;
+    right: 40px;
     z-index: 1000;
-    border-bottom: 1px solid #333;
+    pointer-events: none; 
+}
+
+#nav-links {
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
 }
 
 #nav-links a {
-    color: #00ffcc; /* Terminal Green/Cyan */
+    color: #00ffcc;
     text-decoration: none;
-    margin-right: 25px;
     font-weight: bold;
+    font-size: 0.85rem;
 }
 
-#nav-links a:hover {
+#nav-links a:hover, #email-link:hover {
+    color: #fff;
     text-shadow: 0 0 10px #00ffcc;
 }
 
@@ -40,14 +62,8 @@ body {
 section {
     height: 100vh;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
-}
-
-.content-block {
-    border-top: 1px solid #222;
 }
 
 /* Cube Styles */
@@ -55,15 +71,14 @@ section {
 .cube {
     width: 100%; height: 100%; position: relative;
     transform-style: preserve-3d; cursor: grab;
-    transition: transform 0.1s ease-out;
 }
 .cube:active { cursor: grabbing; }
 .face {
     position: absolute; width: 200px; height: 200px;
-    border: 2px solid rgba(0, 255, 204, 0.3);
+    border: 1px solid rgba(0, 255, 204, 0.3);
     display: flex; align-items: center; justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(2px); box-shadow: inset 0 0 15px rgba(0, 255, 204, 0.1);
+    background: rgba(0, 255, 204, 0.03);
+    backdrop-filter: blur(2px);
 }
 
 .front  { transform: rotateY(0deg) translateZ(100px); }

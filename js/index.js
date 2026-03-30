@@ -2,8 +2,9 @@
 
 const cube = document.getElementById('cube');
 const navLinksContainer = document.getElementById('nav-links');
+const emailLink = document.getElementById('email-link');
 
-// 1. Terminal Typing Effect for Navigation
+const userEmail = "USER@EXAMPLE.COM";
 const menuItems = [
     { name: "ABOUT", link: "#about" },
     { name: "EDUCATION", link: "#education" },
@@ -11,24 +12,29 @@ const menuItems = [
     { name: "CONTACT", link: "#contact" }
 ];
 
-async function typeNavbar() {
+async function typeEffect() {
+    // 1. Type the Email in the Center First
+    for (let i = 0; i <= userEmail.length; i++) {
+        emailLink.innerHTML = `${userEmail.slice(0, i)}<span style="opacity: ${i % 2 === 0 ? 1 : 0}">_</span>`;
+        await new Promise(r => setTimeout(r, 50));
+    }
+    emailLink.innerHTML = userEmail;
+
+    // 2. Type the Sidebar Links
     for (const item of menuItems) {
-        let anchor = document.createElement('a');
-        anchor.href = item.itemLink; // Placeholder for logic
+        const anchor = document.createElement('a');
+        anchor.href = item.link;
         navLinksContainer.appendChild(anchor);
         
-        // Type out each letter
         for (let i = 0; i <= item.name.length; i++) {
-            anchor.innerHTML = `> ${item.name.slice(0, i)}<span class="cursor">_</span>`;
-            anchor.href = item.link; 
-            await new Promise(resolve => setTimeout(resolve, 100));
+            anchor.innerHTML = `> ${item.name.slice(0, i)}<span style="opacity: ${i % 2 === 0 ? 1 : 0}">_</span>`;
+            await new Promise(r => setTimeout(r, 50));
         }
-        // Remove the underscore from previous word before starting next
         anchor.innerHTML = `> ${item.name}`;
     }
 }
 
-// 2. Cube Rotation Logic
+// Cube Rotation logic
 let isDragging = false;
 let startMouseX, startMouseY;
 let currentRotationX = -20;
@@ -55,5 +61,4 @@ document.addEventListener('mousemove', (e) => {
 
 document.addEventListener('mouseup', () => isDragging = false);
 
-// Start the typing effect when the page loads
-window.onload = typeNavbar;
+window.onload = typeEffect;
