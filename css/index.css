@@ -25,6 +25,13 @@ body {
     color: #00ffcc;
     text-decoration: none;
     font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+#email-link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #00ffcc;
+    transform: translateY(-3px);
 }
 
 #navbar {
@@ -45,6 +52,13 @@ body {
     color: #00ffcc;
     text-decoration: none;
     font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+#nav-links a:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #00ffcc;
+    transform: translateX(-5px); 
 }
 
 /* Hero Content Styling */
@@ -126,7 +140,7 @@ body {
 #resume-link:hover {
     color: #fff;
     text-shadow: 0 0 10px #00ffcc;
-    transform: scale(1.1);
+    transform: translateX(-5px);
 }
 
 /* Terminal Icon - Top Left */
@@ -142,8 +156,9 @@ body {
 }
 
 #terminal-icon:hover {
-    transform: scale(1.2);
+    color: #fff;
     text-shadow: 0 0 10px #00ffcc;
+    transform: translateX(5px);
 }
 
 /* Terminal Window */
@@ -337,4 +352,9 @@ section {
     #social-container, #resume-container {
         bottom: 15px;
     }
+
+    #nav-links a:hover, #social-links a:hover, #resume-link:hover, #terminal-icon:hover, #email-link:hover {
+        transform: none;
+    }
+
 }
