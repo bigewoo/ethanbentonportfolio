@@ -72,17 +72,13 @@ body {
 }
 
 #hero-name {
-    font-size: 2.5rem;
-    margin: 0;
-    color: #fff;
-    text-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+    font-size: 3.5rem; /* Slightly larger for impact */
+    margin-bottom: 10px;
 }
 
 #hero-title {
-    font-size: 1.1rem;
-    color: #00ffcc;
-    margin-top: 10px;
-    opacity: 0.8;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
 }
 
 /* Social Links - Bottom Left Positioning */
@@ -235,6 +231,25 @@ body {
     animation: blink 1s infinite;
 }
 
+/* --- Content Block Styling --- */
+.content-block {
+    flex-direction: column; 
+    padding: 100px 10%; /* Increased horizontal padding to prevent clipping */
+    box-sizing: border-box;
+    align-items: center; /* Center the box on the screen */
+    text-align: left;
+}
+
+.content-block h2 {
+    color: #00ffcc;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 15px rgba(0, 255, 204, 0.6);
+    width: 100%;
+    max-width: 900px;
+}
+
 /* --- Scrollable Text Box for Long Content --- */
 .scrollable-box {
     max-height: 60vh; /* Prevents the box from getting taller than 60% of the screen */
@@ -260,6 +275,33 @@ body {
 .scrollable-box::-webkit-scrollbar-thumb:hover {
     background: #fff;
     box-shadow: 0 0 10px #00ffcc;
+}
+
+/* Text Selection Color */
+::selection {
+    background: #00ffcc;
+    color: #000;
+}
+
+/* Subtle glow for all section headers on hover */
+.content-block h2:hover {
+    color: #fff;
+    text-shadow: 0 0 20px #00ffcc;
+    transition: 0.3s ease;
+}
+
+/* Inline Link styling for the Contact boxes */
+.inline-link {
+    color: #00ffcc;
+    text-decoration: none;
+    border-bottom: 1px dashed transparent;
+    transition: all 0.2s ease;
+}
+
+.inline-link:hover {
+    color: #fff;
+    border-bottom: 1px dashed #00ffcc;
+    text-shadow: 0 0 8px #00ffcc;
 }
 
 /* Timestamp styling for jobs */
@@ -340,12 +382,13 @@ section {
     }
 
     #hero-name {
-        font-size: 1.4rem;
-        margin-top: 20px;
+        font-size: 3.5rem; /* Slightly larger for impact */
+        margin-bottom: 10px;
     }
 
     #hero-title {
-        font-size: 0.75rem;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
     }
 
     /* Shrink the cube significantly for mobile */
