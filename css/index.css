@@ -235,6 +235,42 @@ body {
     animation: blink 1s infinite;
 }
 
+/* --- Scrollable Text Box for Long Content --- */
+.scrollable-box {
+    max-height: 60vh; /* Prevents the box from getting taller than 60% of the screen */
+    overflow-y: auto; /* Adds a scrollbar if the text is too long */
+    padding-right: 20px; /* Gives the scrollbar some breathing room */
+}
+
+/* Custom Webkit Scrollbar for the terminal box */
+.scrollable-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-box::-webkit-scrollbar-track {
+    background: rgba(0, 255, 204, 0.05);
+    border-left: 1px solid rgba(0, 255, 204, 0.2);
+}
+
+.scrollable-box::-webkit-scrollbar-thumb {
+    background: #00ffcc;
+    border-radius: 4px;
+}
+
+.scrollable-box::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+/* Timestamp styling for jobs */
+.timestamp {
+    color: #888 !important; /* Dimmed gray */
+    font-size: 0.85rem !important;
+    margin-top: -5px !important;
+    margin-bottom: 15px !important;
+    font-style: italic;
+}
+
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
