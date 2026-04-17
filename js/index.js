@@ -25,6 +25,36 @@ const menuItems = [
     { name: "CONTACT", link: "#contact" }
 ];
 
+// ==========================================
+// COMMAND DEFINITIONS
+// ==========================================
+const commands = {
+    help: {
+        description: "Displays all available commands or details about a specific command.",
+        usage: "help [command]"
+    },
+    ls: {
+        description: "Lists files and directories in the current directory.",
+        usage: "ls [directory]"
+    },
+    cd: {
+        description: "Changes the current directory.",
+        usage: "cd [directory]"
+    },
+    clear: {
+        description: "Clears the terminal output.",
+        usage: "clear"
+    },
+    whoami: {
+        description: "Displays user information.",
+        usage: "whoami"
+    },
+    exit: {
+        description: "Closes the terminal window.",
+        usage: "exit"
+    }
+};
+
 async function typeEffect() {
     // 1. Type Name & Title
     await typeText(heroName, nameText, 60);
@@ -72,47 +102,44 @@ async function typeText(element, text, speed) {
     element.innerHTML = text;
 }
 
-
+// ==========================================
 // Cube Logic
+// ==========================================
 let isDragging = false;
 let startMouseX, startMouseY;
 let currX = -20, currY = 30;
 
 cube.style.transform = `rotateX(${currX}deg) rotateY(${currY}deg)`;
 
-document.addEventListener('mousedown', (e) => { isDragging = true; startMouseX = e.clientX; startMouseY = e.clientY; });
+document.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startMouseX = e.clientX;
+    startMouseY = e.clientY;
+});
+
 document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     currY += (e.clientX - startMouseX) * 0.5;
     currX -= (e.clientY - startMouseY) * 0.5;
     cube.style.transform = `rotateX(${currX}deg) rotateY(${currY}deg)`;
-    startMouseX = e.clientX; startMouseY = e.clientY;
+    startMouseX = e.clientX;
+    startMouseY = e.clientY;
 });
+
 document.addEventListener('mouseup', () => isDragging = false);
 
 // ==========================================
-// TERMINAL LOGIC (Updated & Stateful)
+// TERMINAL LOGIC
 // ==========================================
 const terminalIcon = document.getElementById('terminal-icon');
 const terminalWindow = document.getElementById('terminal-window');
 const closeTerminal = document.getElementById('close-terminal');
 const terminalInput = document.getElementById('terminal-input');
 const terminalOutput = document.getElementById('terminal-output');
-const promptElement = document.getElementById('prompt'); 
-const terminalBody = document.getElementById('terminal-body'); // Added to fix scrolling
+const promptElement = document.getElementById('prompt');
+const terminalBody = document.getElementById('terminal-body');
 
-// Toggle Terminal
-terminalIcon.addEventListener('click', () => {
-    terminalWindow.classList.toggle('hidden');
-    if (!terminalWindow.classList.contains('hidden')) terminalInput.focus();
-});
-
-closeTerminal.addEventListener('click', () => {
-    terminalWindow.classList.add('hidden');
-});
-
-// File System State
-let currentDir = "~"; 
+let currentDir = "~";
 
 const fileSystem = {
     "~": ["about/", "education/", "work/", "contact/"],
@@ -122,12 +149,26 @@ const fileSystem = {
     "contact": ["socials.txt"]
 };
 
-// Command Event Listener
+terminalIcon.addEventListener('click', () => {
+    terminalWindow.classList.toggle('hidden');
+    if (!terminalWindow.classList.contains('hidden')) terminalInput.focus();
+});
+
+closeTerminal.addEventListener('click', () => {
+    terminalWindow.classList.add('hidden');
+});
+
 terminalInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        handleTabAutocomplete();
+        return;
+    }
+
     if (e.key === 'Enter') {
-        const input = terminalInput.value.trim(); 
-        const [cmd, ...args] = input.toLowerCase().split(' '); 
-        
+        const input = terminalInput.value.trim();
+        const [cmd, ...args] = input.toLowerCase().split(' ');
+
         if (input !== "") {
             processCommand(cmd, args, input);
         } else {
@@ -138,31 +179,73 @@ terminalInput.addEventListener('keydown', (e) => {
 
         // Clear the input immediately so it's not prefilled
         terminalInput.value = '';
-        
+
         // Auto-scroll to bottom
         terminalBody.scrollTop = terminalBody.scrollHeight;
     }
 });
 
-// Command Processor
+function handleTabAutocomplete() {
+    const input = terminalInput.value.trim();
+    const parts = input.split(" ");
+
+    if (parts.length === 1) {
+        const matches = Object.keys(commands).filter(cmd => cmd.startsWith(parts[0]));
+
+        if (matches.length === 1) {
+            terminalInput.value = matches[0] + " ";
+        } else if (matches.length > 1) {
+            const displayDir = currentDir === "~" ? "~" : "/" + currentDir;
+            terminalOutput.innerHTML += `\n${matches.join("   ")}\nethanbenton@portfolio:${displayDir}$ ${terminalInput.value}`;
+        }
+    } else if (parts.length === 2 && (parts[0] === "cd" || parts[0] === "ls")) {
+        const dirs = fileSystem[currentDir]
+            .filter(item => item.endsWith('/'))
+            .map(item => item.replace('/', ''));
+
+        const matches = dirs.filter(dir => dir.startsWith(parts[1]));
+
+        if (matches.length === 1) {
+            terminalInput.value = `${parts[0]} ${matches[0]}`;
+        } else if (matches.length > 1) {
+            const displayDir = currentDir === "~" ? "~" : "/" + currentDir;
+            terminalOutput.innerHTML += `\n${matches.join("   ")}\nethanbenton@portfolio:${displayDir}$ ${terminalInput.value}`;
+        }
+    }
+
+    terminalBody.scrollTop = terminalBody.scrollHeight;
+}
+
 function processCommand(cmd, args, originalInput) {
     // Determine how the path should look for the history log
     const displayDir = currentDir === "~" ? "~" : "/" + currentDir;
     let response = `\nethanbenton@portfolio:${displayDir}$ ${originalInput}\n`;
-    
+
     switch (cmd) {
         case 'help':
-            response += "Available commands: help, ls, cd [dir], clear, whoami, exit";
+            if (args[0]) {
+                const command = commands[args[0]];
+                response += command
+                    ? `${args[0]} - ${command.description}\nUsage: ${command.usage}`
+                    : `No help found for '${args[0]}'`;
+            } else {
+                Object.entries(commands).forEach(([name, info]) => {
+                    response += `${name.padEnd(10)} - ${info.description}\n`;
+                });
+            }
             break;
 
         case 'ls':
-            // Look up the files based on where we currently are
-            const contents = fileSystem[currentDir];
-            response += contents.join("  ");
+            const targetDir = args[0] || currentDir;
+            if (fileSystem[targetDir]) {
+                response += fileSystem[targetDir].join("  ");
+            } else {
+                response += `ls: cannot access '${targetDir}': No such directory`;
+            }
             break;
 
         case 'whoami':
-            response += "Ethan Benton - SysAdmin | DevOps | GenAI Enthusiast";
+            response += "Ethan Benton - System Administrator | DevOps | Generative AI";
             break;
 
         case 'clear':
@@ -171,6 +254,7 @@ function processCommand(cmd, args, originalInput) {
 
         case 'cd':
             const target = args[0];
+
             if (!target || target === "~" || target === "..") {
                 currentDir = "~";
                 response += "Returned to root directory.";
@@ -184,7 +268,7 @@ function processCommand(cmd, args, originalInput) {
             } else {
                 response += `bash: cd: ${target}: No such directory`;
             }
-            
+
             // UPDATE THE UI PROMPT dynamically
             const newDisplayDir = currentDir === "~" ? "~" : "/" + currentDir;
             promptElement.innerText = `ethanbenton@portfolio:${newDisplayDir}$`;
@@ -198,8 +282,8 @@ function processCommand(cmd, args, originalInput) {
             response += `bash: ${cmd}: command not found`;
     }
 
-    // Append the response to the terminal window
     terminalOutput.innerHTML += response;
+    terminalBody.scrollTop = terminalBody.scrollHeight;
 }
 
 window.onload = typeEffect;
