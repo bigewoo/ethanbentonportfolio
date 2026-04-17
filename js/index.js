@@ -140,6 +140,8 @@ const promptElement = document.getElementById('prompt');
 const terminalBody = document.getElementById('terminal-body');
 
 let currentDir = "~";
+let tabCount = 0;
+let lastTabInput = "";
 
 const fileSystem = {
     "~": ["about/", "education/", "work/", "contact/"],
@@ -165,6 +167,9 @@ terminalInput.addEventListener('keydown', (e) => {
         return;
     }
 
+    // Reset tab count if any other key is pressed
+    tabCount = 0;
+
     if (e.key === 'Enter') {
         const input = terminalInput.value.trim();
         const [cmd, ...args] = input.toLowerCase().split(' ');
@@ -186,18 +191,24 @@ terminalInput.addEventListener('keydown', (e) => {
 });
 
 function handleTabAutocomplete() {
-    const input = terminalInput.value; // Removed .trim() to detect trailing spaces!
+    const input = terminalInput.value; 
+    
+    // Reset tab cycle if the input string changes
+    if (input !== lastTabInput) {
+        tabCount = 0;
+    }
+    lastTabInput = input;
+    
     const parts = input.split(" ");
+    let matches = [];
 
     if (parts.length === 1) {
         // 1. Autocompleting commands
-        const matches = Object.keys(commands).filter(cmd => cmd.startsWith(parts[0].toLowerCase()));
+        matches = Object.keys(commands).filter(cmd => cmd.startsWith(parts[0].toLowerCase()));
 
         if (matches.length === 1) {
             terminalInput.value = matches[0] + " ";
-        } else if (matches.length > 1) {
-            const displayDir = currentDir === "~" ? "~" : "/" + currentDir;
-            terminalOutput.innerHTML += `\n${matches.join("   ")}\nethanbenton@portfolio:${displayDir}$ ${terminalInput.value}`;
+            tabCount = 0;
         }
     } else if (parts.length === 2 && (parts[0] === "cd" || parts[0] === "ls")) {
         // 2. Autocompleting directories/files
@@ -205,7 +216,7 @@ function handleTabAutocomplete() {
             ? fileSystem[currentDir].map(item => item.replace('/', ''))
             : [];
 
-        const matches = items.filter(item => item.startsWith(parts[1]));
+        matches = items.filter(item => item.startsWith(parts[1]));
 
         if (matches.length === 1) {
             terminalInput.value = `${parts[0]} ${matches[0]}`;
@@ -214,9 +225,17 @@ function handleTabAutocomplete() {
             if (fileSystem["~"].includes(matches[0] + "/")) {
                 terminalInput.value += "/";
             }
-        } else if (matches.length > 1) {
+            tabCount = 0;
+        }
+    }
+
+    // Handle double-tab to show options
+    if (matches.length > 1) {
+        tabCount++;
+        if (tabCount >= 2) {
             const displayDir = currentDir === "~" ? "~" : "/" + currentDir;
-            terminalOutput.innerHTML += `\n${matches.join("   ")}\nethanbenton@portfolio:${displayDir}$ ${terminalInput.value}`;
+            terminalOutput.innerHTML += `\n${matches.join("   ")}\nethanbenton@portfolio:${displayDir}$ ${input}`;
+            tabCount = 0; 
         }
     }
 
@@ -248,7 +267,7 @@ function processCommand(cmd, args, originalInput) {
         case 'ls':
             let targetDirLs = args[0] || currentDir;
             
-            // Strip trailing slash so "about/" becomes "about" for the lookup
+            // Strip trailing slash so lookup doesn't fail
             if (targetDirLs !== "~" && targetDirLs !== "/") {
                 targetDirLs = targetDirLs.replace(/\/$/, ""); 
             }
