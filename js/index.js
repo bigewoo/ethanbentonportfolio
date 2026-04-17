@@ -186,11 +186,12 @@ terminalInput.addEventListener('keydown', (e) => {
 });
 
 function handleTabAutocomplete() {
-    const input = terminalInput.value.trim();
+    const input = terminalInput.value; // Removed .trim() to detect trailing spaces!
     const parts = input.split(" ");
 
     if (parts.length === 1) {
-        const matches = Object.keys(commands).filter(cmd => cmd.startsWith(parts[0]));
+        // 1. Autocompleting commands
+        const matches = Object.keys(commands).filter(cmd => cmd.startsWith(parts[0].toLowerCase()));
 
         if (matches.length === 1) {
             terminalInput.value = matches[0] + " ";
@@ -199,14 +200,20 @@ function handleTabAutocomplete() {
             terminalOutput.innerHTML += `\n${matches.join("   ")}\nethanbenton@portfolio:${displayDir}$ ${terminalInput.value}`;
         }
     } else if (parts.length === 2 && (parts[0] === "cd" || parts[0] === "ls")) {
-        const dirs = fileSystem[currentDir]
-            .filter(item => item.endsWith('/'))
-            .map(item => item.replace('/', ''));
+        // 2. Autocompleting directories/files
+        const items = fileSystem[currentDir]
+            ? fileSystem[currentDir].map(item => item.replace('/', ''))
+            : [];
 
-        const matches = dirs.filter(dir => dir.startsWith(parts[1]));
+        const matches = items.filter(item => item.startsWith(parts[1]));
 
         if (matches.length === 1) {
             terminalInput.value = `${parts[0]} ${matches[0]}`;
+            
+            // Automatically add a trailing slash back if it's a directory
+            if (fileSystem["~"].includes(matches[0] + "/")) {
+                terminalInput.value += "/";
+            }
         } else if (matches.length > 1) {
             const displayDir = currentDir === "~" ? "~" : "/" + currentDir;
             terminalOutput.innerHTML += `\n${matches.join("   ")}\nethanbenton@portfolio:${displayDir}$ ${terminalInput.value}`;
@@ -214,6 +221,9 @@ function handleTabAutocomplete() {
     }
 
     terminalBody.scrollTop = terminalBody.scrollHeight;
+    
+    // Force focus back to the input to prevent the browser from jumping to page links
+    setTimeout(() => terminalInput.focus(), 0);
 }
 
 function processCommand(cmd, args, originalInput) {
@@ -236,11 +246,17 @@ function processCommand(cmd, args, originalInput) {
             break;
 
         case 'ls':
-            const targetDir = args[0] || currentDir;
-            if (fileSystem[targetDir]) {
-                response += fileSystem[targetDir].join("  ");
+            let targetDirLs = args[0] || currentDir;
+            
+            // Strip trailing slash so "about/" becomes "about" for the lookup
+            if (targetDirLs !== "~" && targetDirLs !== "/") {
+                targetDirLs = targetDirLs.replace(/\/$/, ""); 
+            }
+            
+            if (fileSystem[targetDirLs]) {
+                response += fileSystem[targetDirLs].join("  ");
             } else {
-                response += `ls: cannot access '${targetDir}': No such directory`;
+                response += `ls: cannot access '${args[0]}': No such directory`;
             }
             break;
 
@@ -253,20 +269,25 @@ function processCommand(cmd, args, originalInput) {
             return;
 
         case 'cd':
-            const target = args[0];
+            let targetDirCd = args[0];
+            
+            // Strip trailing slash here too
+            if (targetDirCd && targetDirCd !== "~" && targetDirCd !== "/" && targetDirCd !== "..") {
+                targetDirCd = targetDirCd.replace(/\/$/, "");
+            }
 
-            if (!target || target === "~" || target === "..") {
+            if (!targetDirCd || targetDirCd === "~" || targetDirCd === "..") {
                 currentDir = "~";
                 response += "Returned to root directory.";
                 // Scroll back to the top of the page
                 document.body.scrollIntoView({ behavior: 'smooth' });
-            } else if (fileSystem[target]) {
-                currentDir = target;
+            } else if (fileSystem[targetDirCd]) {
+                currentDir = targetDirCd;
                 // Scroll to the specific section on the page
-                const section = document.getElementById(target);
+                const section = document.getElementById(targetDirCd);
                 if (section) section.scrollIntoView({ behavior: 'smooth' });
             } else {
-                response += `bash: cd: ${target}: No such directory`;
+                response += `bash: cd: ${args[0]}: No such directory`;
             }
 
             // UPDATE THE UI PROMPT dynamically
@@ -285,5 +306,13 @@ function processCommand(cmd, args, originalInput) {
     terminalOutput.innerHTML += response;
     terminalBody.scrollTop = terminalBody.scrollHeight;
 }
+
+// Keep focus on input if clicking anywhere inside the terminal
+terminalBody.addEventListener('click', () => {
+    // Only focus the input if the user isn't trying to highlight/copy text
+    if (window.getSelection().toString() === '') {
+        terminalInput.focus();
+    }
+});
 
 window.onload = typeEffect;
